@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Leap Motion</title>
+
+  <script src="js/leap-0.6.4.min.js"></script>
+  <script src="js/jquery-1.12.3.min.js"></script>
+  <script src="js/leap-plugins-0.1.11.min.js"></script>
+  <script src="js/leap.hand-entry.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+
+</head>
+
+
+<body>
+
+
+
+<div id="output"></div>
+<div id="pinch"></div>
+<img id="image1" src="img/3.jpg">
+
+
+
+
+
+<script type="text/javascript">
+  
+
+  var output = $('#output');
+  var hand, finger;
+  var images = {};
+ 
+ Leap.loop(function(frame){
+ 	output.html('Frame: ' + frame.id);
+
+ 	//On every frame, look at every hand using the native javascript forEach method, and position the image accordingly
+ 	frame.hands.forEach(function(hand, index){
+ 		//Get the image, or make a new image
+ 		//var img = ( images[index] || (images[index] = new Image($('#image1'))) );
+
+ 		var testImage = images[index]; 
+
+ 		testImage.setTransform(hand.screenPosition(), hand.roll(), hand.pinchStrength)
+        output.html('Pinch: ' + hand.pinchStrength);
+
+ 	});
+
+
+
+
+ }).use('screenPosition', {scale:0.25});
+
+
+//This class handles the DOM elements & interactions.
+var Image = function(image){
+   	var currentImage = this;
+
+   	currentImage.setTransform = function(position, rotation, pinch){
+   		var width = parseFloat(image.css('width'));
+   		var height = parseFloat(image.css('height'));
+
+   		var left =  position[0] - width  / 2 + 'px';
+   		var top = position[1] - height / 2 + 'px';
+   		var transform = 'rotate(' + - rotation + 'rad)';  
+
+
+   		//Testing pinch
+   		var pinch = ' scale(' + (1+pinch) + ',' + (1+pinch)  +  ' )';
+   		transform = transform + pinch;
+
+   		image.css('left', left);
+ 		image.css('top', top);
+        image.css('transform', transform);  
+
+
+   	};
+}
+
+images[0] = new Image($('#image1'));
+
+</script>
+
+</body>
+</html>
