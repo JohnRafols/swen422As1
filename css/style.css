@@ -7,3 +7,10 @@ img {
   position: absolute;
   width: 300px;
 }
+
+.active {
+  border-radius: 10px 10px 10px 10px;
+  -moz-border-radius: 10px 10px 10px 10px;
+  -webkit-border-radius: 10px 10px 10px 10px;
+  border: 10px solid #ff0303;
+}

@@ -9,6 +9,7 @@
   <script src="js/leap.hand-entry.js"></script>
   <link rel="stylesheet" type="text/css" href="css/style.css">
 
+
 </head>
 
 
@@ -19,7 +20,8 @@
 <div id="output"></div>
 <div id="pinch"></div>
 <img id="image1" src="img/3.jpg">
-<img id="image2" src="img/3.jpg">
+<img id="image2" src="img/archie.jpg">
+<img id="image3" src="img/f4.jpg">
 
 
 
@@ -29,22 +31,106 @@
 
   var output = $('#output');
   var hand, finger;
-  var images = {};
+  var images = [];
+  var count = 0;
 
  Leap.loop(function(frame){
   output.html('Frame: ' + frame.id);
-
+  var hand = frame.hands[0];
+  var hand2 = frame.hands[1];
   //On every frame, look at every hand using the native javascript forEach method, and position the image accordingly
-  frame.hands.forEach(function(hand, index){
     //Get the image, or make a new image
     //var img = ( images[index] || (images[index] = new Image($('#image1'))) );
 
-    var testImage = images[index];
+  if (hand !== undefined) {
+    var testImage = images[count];
 
     testImage.setTransform(hand.screenPosition(), hand.roll(), hand.pinchStrength)
         output.html('Pinch: ' + hand.pinchStrength);
 
-  });
+    // Display Gesture object data
+    if (frame.gestures.length > 0) {
+      for (var i = 0; i < frame.gestures.length; i++) {
+        var gesture = frame.gestures[i];
+        if(gesture.type == "swipe") {
+            //Classify swipe as either horizontal or vertical
+            var isHorizontal = Math.abs(gesture.direction[0]) > Math.abs(gesture.direction[1]);
+            //Classify as right-left or up-down
+            if(isHorizontal){
+              if(gesture.direction[0] > 0){
+                swipeDirection = "right";
+              } else {
+                swipeDirection = "left";
+              }
+            } else { //vertical
+              if(gesture.direction[1] > 0){
+                swipeDirection = "up";
+              } else {
+                swipeDirection = "down";
+              }
+            }
+          // console.log(swipeDirection)
+        }
+      }
+    }
+  }
+
+  var swipeDirection = "";
+
+  if (hand2 !== undefined) {
+    // Display Gesture object data
+    if (frame.gestures.length > 0) {
+      for (var i = 0; i < frame.gestures.length; i+=2) {
+        var gesture = frame.gestures[i];
+        if(gesture.type == "swipe") {
+            //Classify swipe as either horizontal or vertical
+            var isHorizontal = Math.abs(gesture.direction[0]) > Math.abs(gesture.direction[1]);
+            //Classify as right-left or up-down
+            if(isHorizontal){
+              if(gesture.direction[0] > 0){
+                swipeDirection = "right";
+              } else {
+                swipeDirection = "left";
+              }
+            } else { //vertical
+              if(gesture.direction[1] > 0){
+                swipeDirection = "up";
+              } else {
+                swipeDirection = "down";
+              }
+            }
+          console.log(swipeDirection);
+          console.log(gesture.speed);
+          console.log(gesture.state);
+        }
+        if(gesture.state == "stop"){
+          if(swipeDirection == "right" || swipeDirection == "up") {
+            if(count >= images.length-1){
+              count = images.length-1
+              console.log(count);
+            }
+            else {
+              count++;
+              console.log(count);
+            }
+          }
+          else if (swipeDirection == "left" || swipeDirection == "down") {
+            if(count <= 0){
+              count = 0
+              console.log(count);
+            }
+            else {
+              count--;
+              console.log(count);
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+
 
 
 
@@ -64,26 +150,45 @@ var currentImage = this;
     var top = position[1] - height / 2 + 'px';
     var transform = 'rotate(' + - rotation + 'rad)';
 
+    if(pinch >= 0.9) {
+      image.css('left', left);
+      image.css('top', top);
+      image.css('transform', transform);
+      image.css('z-index', position[2]);
+      image.addClass('active');
+
+      if(position[2] >= 0) {
+        image.css('z-index', position[2].toFixed())
+      }
+      else{
+        image.css('z-index', position[2].toFixed())
+      }
+    }
+    else{
+      image.removeClass('active');
+    }
 
     //Testing pinch
-    var pinch = ' scale(' + (1+pinch) + ',' + (1+pinch)  +  ' )';
+    var scale = ' scale(' + (1+pinch) + ',' + (1+pinch)  +  ' )';
     transform = transform + pinch;
+    // console.log(pinch);
 
-    image.css('left', left);
-    image.css('top', top);
-    image.css('transform', transform);
+
 
     // Checks for the X position
-    if(position[2] >= 0)
-      image.css('z-index', 1)
-    else
-      image.css('z-index', -1)
+    // if(position[2] >= 0) {
+    //   image.css('z-index', position[2])
+    // }
+    // else{
+    //   image.css('z-index', position[2])
+    // }
+
   };
 }
 
-images[0] = new Image($('#image1'));
-images[1] = new Image($('#image2'));
-
+images.push(new Image($('#image1')));
+images.push(new Image($('#image2')));
+images.push(new Image($('#image3')));
 </script>
 
 </body>
