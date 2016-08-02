@@ -19,32 +19,32 @@
 <div id="output"></div>
 <div id="pinch"></div>
 <img id="image1" src="img/3.jpg">
-
+<img id="image2" src="img/3.jpg">
 
 
 
 
 <script type="text/javascript">
-  
+
 
   var output = $('#output');
   var hand, finger;
   var images = {};
- 
+
  Leap.loop(function(frame){
- 	output.html('Frame: ' + frame.id);
+  output.html('Frame: ' + frame.id);
 
- 	//On every frame, look at every hand using the native javascript forEach method, and position the image accordingly
- 	frame.hands.forEach(function(hand, index){
- 		//Get the image, or make a new image
- 		//var img = ( images[index] || (images[index] = new Image($('#image1'))) );
+  //On every frame, look at every hand using the native javascript forEach method, and position the image accordingly
+  frame.hands.forEach(function(hand, index){
+    //Get the image, or make a new image
+    //var img = ( images[index] || (images[index] = new Image($('#image1'))) );
 
- 		var testImage = images[index]; 
+    var testImage = images[index];
 
- 		testImage.setTransform(hand.screenPosition(), hand.roll(), hand.pinchStrength)
+    testImage.setTransform(hand.screenPosition(), hand.roll(), hand.pinchStrength)
         output.html('Pinch: ' + hand.pinchStrength);
 
- 	});
+  });
 
 
 
@@ -54,30 +54,35 @@
 
 //This class handles the DOM elements & interactions.
 var Image = function(image){
-   	var currentImage = this;
+var currentImage = this;
 
-   	currentImage.setTransform = function(position, rotation, pinch){
-   		var width = parseFloat(image.css('width'));
-   		var height = parseFloat(image.css('height'));
+  currentImage.setTransform = function(position, rotation, pinch){
+    var width = parseFloat(image.css('width'));
+    var height = parseFloat(image.css('height'));
 
-   		var left =  position[0] - width  / 2 + 'px';
-   		var top = position[1] - height / 2 + 'px';
-   		var transform = 'rotate(' + - rotation + 'rad)';  
-
-
-   		//Testing pinch
-   		var pinch = ' scale(' + (1+pinch) + ',' + (1+pinch)  +  ' )';
-   		transform = transform + pinch;
-
-   		image.css('left', left);
- 		image.css('top', top);
-        image.css('transform', transform);  
+    var left =  position[0] - width  / 2 + 'px';
+    var top = position[1] - height / 2 + 'px';
+    var transform = 'rotate(' + - rotation + 'rad)';
 
 
-   	};
+    //Testing pinch
+    var pinch = ' scale(' + (1+pinch) + ',' + (1+pinch)  +  ' )';
+    transform = transform + pinch;
+
+    image.css('left', left);
+    image.css('top', top);
+    image.css('transform', transform);
+
+    // Checks for the X position
+    if(position[2] >= 0)
+      image.css('z-index', 1)
+    else
+      image.css('z-index', -1)
+  };
 }
 
 images[0] = new Image($('#image1'));
+images[1] = new Image($('#image2'));
 
 </script>
 
