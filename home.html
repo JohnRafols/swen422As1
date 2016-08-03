@@ -5,9 +5,28 @@
 
   <script src="js/leap-0.6.4.min.js"></script>
   <script src="js/jquery-1.12.3.min.js"></script>
+
+  <style type="text/css">
+        .button {
+            color:white;
+            display:inline-block;
+            padding:30px;
+            background-color: lightpink;
+            transition-duration: 1s;
+        }
+
+        .button.hover {
+            background-color: orangered;
+        }
+  </style>
+
+
+  <script src="js/leap-manager.js"></script>
+
   <script src="js/leap-plugins-0.1.11.min.js"></script>
   <script src="js/leap.hand-entry.js"></script>
   <link rel="stylesheet" type="text/css" href="css/style.css">
+  <link rel="stylesheet" type="text/css" href="css/leap-manager.min.css">
 
 </head>
 
@@ -16,11 +35,27 @@
 
 
 
-<div id="output"></div>
-<div id="pinch"></div>
-<img id="image1" src="img/3.jpg">
+<div id="output">
+  
+</div>
 
+<div id="pinch">
+  
+</div>
 
+<div id= "canvas" 
+  style = "background-color: grey; height: 300px; margin-bottom: 50px;" > 
+
+</div>
+
+<div id="thumbnails"> 
+
+<!-- You need the leap-interactive class -->
+<img id="image1" class="leap-interactive" src="img/1.jpg">
+<img id="image2" class="leap-interactive" src="img/2.jpg">
+<img id="image3" class="leap-interactive" src="img/3.jpg">
+
+</div>
 
 
 
@@ -29,31 +64,35 @@
 
   var output = $('#output');
   var hand, finger;
+  //All images
   var images = {};
+  var imageIndex = 0;
+
  
  Leap.loop(function(frame){
- 	output.html('Frame: ' + frame.id);
-
  	//On every frame, look at every hand using the native javascript forEach method, and position the image accordingly
  	frame.hands.forEach(function(hand, index){
  		//Get the image, or make a new image
  		//var img = ( images[index] || (images[index] = new Image($('#image1'))) );
-
- 		var testImage = images[index]; 
-
- 		testImage.setTransform(hand.screenPosition(), hand.roll(), hand.pinchStrength)
-        output.html('Pinch: ' + hand.pinchStrength);
-
+ 		var currentImage = images[imageIndex];  
+ 		currentImage.setTransform(hand.screenPosition(), hand.roll(), hand.pinchStrength)
+ 
  	});
-
-
-
-
  }).use('screenPosition', {scale:0.25});
 
 
+//This is the leapmanager library
+  LeapManager.init({
+      maxCursors:1,
+      // enableSenchaTouch: true,
+      enableTouchScrolling:true,
+      enableScrollbarScrolling:false
+  });
+
+
 //This class handles the DOM elements & interactions.
-var Image = function(image){
+var Image = function(image, index){
+    var domImage = image;
    	var currentImage = this;
 
    	currentImage.setTransform = function(position, rotation, pinch){
@@ -70,14 +109,41 @@ var Image = function(image){
    		transform = transform + pinch;
 
    		image.css('left', left);
- 		image.css('top', top);
-        image.css('transform', transform);  
-
-
+ 		  image.css('top', top);
+      image.css('transform', transform);  
+      image.css('position', 'absolute');  
    	};
+
+    currentImage.getDom = function(){
+      return domImage;
+    }
+
+    currentImage.restartEverything = function(){
+      //Maybe seperate the logic for thumbnails and images...
+      //var currentImage should be global and ever changing...
+      $('img').css('left', 0);
+      $('img').css('top', 0);
+      $('img').css('transform', 'none');  
+      $('img').css('position', 'static');  
+      $('img').css('height', 'auto');  
+      $('img').css('width', '100px');
+    }
+
+    image.on('click' , function (event) {
+      imageIndex = index;
+      currentImage.restartEverything();
+    });
+
 }
 
-images[0] = new Image($('#image1'));
+  
+//Thumbnails
+images[0] = new Image($('#image1'), 0);
+images[1] = new Image($('#image2'), 1);
+images[2] = new Image($('#image3'), 2);
+
+
+
 
 </script>
 

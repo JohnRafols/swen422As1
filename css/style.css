@@ -1,4 +1,14 @@
 #image1{
-	position: absolute;
-	width: 300px;
+ 	width: 100px;
+}
+
+#image2{
+ 	width: 100px;
+}
+#image3{
+ 	width: 100px;
+}
+
+#cursor{
+ 	width: 100px;
 }
