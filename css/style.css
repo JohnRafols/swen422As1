@@ -1,7 +1,15 @@
-#image1{
-	position: absolute;
-	width: 300px;
+#image0{
+	top: 100px;
 }
+
+#image1{
+  top: 300px;
+}
+
+#image2{
+  top: 500px;
+}
+
 
 img {
   position: absolute;
@@ -13,4 +21,26 @@ img {
   -moz-border-radius: 10px 10px 10px 10px;
   -webkit-border-radius: 10px 10px 10px 10px;
   border: 10px solid #ff0303;
+}
+
+.selected {
+  border-radius: 10px 10px 10px 10px;
+  -moz-border-radius: 10px 10px 10px 10px;
+  -webkit-border-radius: 10px 10px 10px 10px;
+  border: 10px solid #000;
+}
+
+#cursor {
+  width: 20px;
+  height: 20px;
+  position: fixed;
+  margin-left: -50px;
+  margin-top: -50px;
+  z-index: 910;
+
+  background: black;
+  border-radius: 100%;
+  background: -webkit-radial-gradient(100px 100px, circle, #5cabff, #000);
+  background: -moz-radial-gradient(100px 100px, circle, #5cabff, #000);
+  background: radial-gradient(100px 100px, circle, #5cabff, #000);
 }
