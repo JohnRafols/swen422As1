@@ -93,10 +93,15 @@
         pinchOn = false;
       }
     }
+    else {
+      pinchOn = false;
+    }
+
 
     if (hand !== undefined && hand2 !== undefined) {
       guide.html('Both Hands Detected!');
     }
+
 
     // Display Gesture object data
     if (frame.gestures.length > 0) {
