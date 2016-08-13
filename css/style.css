@@ -1,14 +1,95 @@
+#image0{
+  left: 30px;
+	top: 100px;
+}
+
 #image1{
- 	width: 100px;
+  left: 30px;
+  top: 200px;
 }
 
 #image2{
- 	width: 100px;
-}
-#image3{
- 	width: 100px;
+  left: 30px;
+  top: 300px;
 }
 
-#cursor{
- 	width: 100px;
+
+img {
+/*  position: absolute;
+*/  
+  
+  white-space: pre;
+  max-width: 200px;
 }
+
+/*Leftside Panel*/
+
+.sub {
+  position: absolute;
+  white-space: pre;
+
+  width: 300px;
+  height: 100vh;
+  border: 10px solid #ff0303;
+}
+
+/*Main Block*/
+.main {
+  position: absolute;
+  left: 300px;
+  width: 100vh;
+  height: 100vh;
+  border: 10px solid #000;
+}
+
+.active {
+  border-radius: 10px 10px 10px 10px;
+  -moz-border-radius: 10px 10px 10px 10px;
+  -webkit-border-radius: 10px 10px 10px 10px;
+  border: 10px solid #ff0303;
+}
+
+
+#cursor {
+  width: 20px;
+  height: 20px;
+  position: fixed;
+  margin-left: -50px;
+  margin-top: -50px;
+  z-index: 910;
+
+  background: black;
+  border-radius: 100%;
+  background: -webkit-radial-gradient(100px 100px, circle, #5cabff, #000);
+  background: -moz-radial-gradient(100px 100px, circle, #5cabff, #000);
+  background: radial-gradient(100px 100px, circle, #5cabff, #000);
+}
+
+
+
+
+
+/*
+#image0{
+  left: 30%;
+  top: 10%;
+}
+
+#image1{
+  left: 30%;
+  top: 20%;
+}
+
+#image2{
+  left: 30%;
+  top: 30%;
+}
+
+
+img {
+  position: absolute;
+  width: 20%;
+}
+*/
+
+
